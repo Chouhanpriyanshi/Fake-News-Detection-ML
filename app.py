@@ -2,11 +2,19 @@ import streamlit as st
 import pickle
 import re
 import nltk
+import os
 from nltk.corpus import stopwords
 
-nltk.download('stopwords')
+# Absolute path for nltk_data
+nltk_data_path = os.path.join(os.getcwd(), "nltk_data")
+nltk.data.path.append(nltk_data_path)
 
-stop_words = set(stopwords.words('english'))
+# Download only if missing
+try:
+    stop_words = set(stopwords.words('english'))
+except LookupError:
+    nltk.download('stopwords', download_dir=nltk_data_path)
+    stop_words = set(stopwords.words('english'))
 
 model = pickle.load(open("model.pkl", "rb"))
 vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
